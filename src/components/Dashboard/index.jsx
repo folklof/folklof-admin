@@ -9,7 +9,6 @@ import WeatherIcon from "@mui/icons-material/WbSunny";
 import CalendarIcon from "@mui/icons-material/EventNote";
 import Badge from "@mui/material/Badge";
 import { format } from "date-fns";
-import API_URL from "../../utils/API_URL";
 
 import WeatherPic from "../../assets/weather.jpg";
 import KanbanPic from "../../assets/people-working.avif";
@@ -22,9 +21,11 @@ const cardMediaStyle = {
 
 const DashboardCard = () => {
   const currentDate = new Date();
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user.user);
 
-  console.log(user);
+  if (!user) {
+    window.location.href = "/";
+  }
 
   return (
     <div
@@ -49,13 +50,13 @@ const DashboardCard = () => {
                 align="center"
                 gutterBottom
               >
-                Welcome!
+                Welcome, {user.username}!
               </Typography>
               <Typography variant="body1" color="textSecondary" align="center">
-                Role:
+                You're logged in as <b>{user.role.name}</b>.
               </Typography>
               <Typography variant="body1" color="textSecondary" align="center">
-                Email:
+                {user.email}
               </Typography>
             </>
           ) : (
@@ -121,27 +122,12 @@ const DashboardCard = () => {
           alt="people-working"
         />
         <CardContent>
-          <Badge
-            color="secondary"
-            badgeContent="New"
-            overlap="circular"
-            anchorOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
-          >
-            <Typography
-              variant="h5"
-              color="primary"
-              align="center"
-              gutterBottom
-            >
-              Progress Board
-            </Typography>
-          </Badge>
+          <Typography variant="h5" color="primary" align="center" gutterBottom>
+            Folklof App
+          </Typography>
           <Typography variant="body1" align="center" gutterBottom>
-            A system that helps you or your fellow team to visualize the work
-            and track the progress toward the goals.
+            The Story Teller Platform as an Innovative Educational Tool to
+            Support the SDGs
           </Typography>
         </CardContent>
       </Card>

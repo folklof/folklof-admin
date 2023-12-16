@@ -1,7 +1,8 @@
 import * as React from "react";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../store/userSlice";
 
 import Dashboard from "../Dashboard";
-import AdminPanel from "../AdminPage";
 
 // MUI Components
 import { styled, useTheme } from "@mui/material/styles";
@@ -18,6 +19,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
+import Tooltip from "@mui/material/Tooltip";
 
 // MUI Icons
 import MenuIcon from "@mui/icons-material/Menu";
@@ -25,8 +27,10 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import LogoutIcon from "@mui/icons-material/Logout";
-import ViewKanbanIcon from "@mui/icons-material/ViewKanban";
-import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import BookIcon from "@mui/icons-material/Book";
+import QuizIcon from "@mui/icons-material/Quiz";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 const drawerWidth = 240;
 
@@ -96,10 +100,9 @@ const Drawer = styled(MuiDrawer, {
 
 export default function MiniDrawer() {
   const theme = useTheme();
+  const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
   const [menuData, setMenuData] = React.useState("Dashboard");
-
-  const user = JSON.parse(sessionStorage.getItem("user"));
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -114,7 +117,7 @@ export default function MiniDrawer() {
   };
 
   const handleLogout = () => {
-    sessionStorage.removeItem("token");
+    dispatch(setUser(null));
     window.location.href = "/";
   };
 
@@ -136,7 +139,7 @@ export default function MiniDrawer() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Task Management System
+            Folklof Admin Panel
           </Typography>
         </Toolbar>
       </AppBar>
@@ -158,66 +161,7 @@ export default function MiniDrawer() {
             sx={{ display: "block" }}
             onClick={() => handleListItemClick("Dashboard")}
           >
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                <DashboardIcon />
-              </ListItemIcon>
-              <ListItemText
-                primary={"Dashboard"}
-                sx={{ opacity: open ? 1 : 0 }}
-              />
-            </ListItemButton>
-          </ListItem>
-          <ListItem
-            key={"Progress Board"}
-            disablePadding
-            sx={{ display: "block" }}
-            onClick={() => handleListItemClick("Progress Board")}
-          >
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                <ViewKanbanIcon />
-              </ListItemIcon>
-              <ListItemText
-                primary={"Progress Board"}
-                sx={{ opacity: open ? 1 : 0 }}
-              />
-            </ListItemButton>
-          </ListItem>
-        </List>
-        <Divider />
-        <List>
-          {/* {user.role !== "member" ? (
-            <ListItem
-              key={"AdminPanel"}
-              disablePadding
-              sx={{ display: "block" }}
-              onClick={() => handleListItemClick("AdminPanel")}
-            >
+            <Tooltip title="Dashboard" placement="right">
               <ListItemButton
                 sx={{
                   minHeight: 48,
@@ -232,49 +176,204 @@ export default function MiniDrawer() {
                     justifyContent: "center",
                   }}
                 >
-                  <AdminPanelSettingsIcon />
+                  <DashboardIcon />
                 </ListItemIcon>
                 <ListItemText
-                  primary={"Admin Panel"}
+                  primary={"Dashboard"}
                   sx={{ opacity: open ? 1 : 0 }}
                 />
               </ListItemButton>
-            </ListItem>
-          ) : null} */}
+            </Tooltip>
+          </ListItem>
+          <ListItem
+            key={"Generate Book"}
+            disablePadding
+            sx={{ display: "block" }}
+            onClick={() => handleListItemClick("Generate Book")}
+          >
+            <Tooltip title="Generate Book" placement="right">
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                  }}
+                >
+                  <BookIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primary={"Generate book"}
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
+              </ListItemButton>
+            </Tooltip>
+          </ListItem>
+          <ListItem
+            key={"Create Quiz"}
+            disablePadding
+            sx={{ display: "block" }}
+            onClick={() => handleListItemClick("Create Quiz")}
+          >
+            <Tooltip title="Create Quiz" placement="right">
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                  }}
+                >
+                  <QuizIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primary={"Create Quiz"}
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
+              </ListItemButton>
+            </Tooltip>
+          </ListItem>
+          <ListItem
+            key={"History Quiz"}
+            disablePadding
+            sx={{ display: "block" }}
+            onClick={() => handleListItemClick("History Quiz")}
+          >
+            <Tooltip title="History Quiz" placement="right">
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                  }}
+                >
+                  <QuizIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primary={"History Quiz"}
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
+              </ListItemButton>
+            </Tooltip>
+          </ListItem>
+        </List>
+
+        <Divider />
+        <List>
+          <ListItem
+            key={"User"}
+            disablePadding
+            sx={{ display: "block" }}
+            onClick={() => handleListItemClick("User")}
+          >
+            <Tooltip title="User Management" placement="right">
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                  }}
+                >
+                  <ManageAccountsIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primary={"User Management"}
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
+              </ListItemButton>
+            </Tooltip>
+          </ListItem>
+          <ListItem
+            key={"Profile"}
+            disablePadding
+            sx={{ display: "block" }}
+            onClick={() => handleListItemClick("Profile")}
+          >
+            <Tooltip title="Profile Setting" placement="right">
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                  }}
+                >
+                  <AccountCircleIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primary={"Profile Setting"}
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
+              </ListItemButton>
+            </Tooltip>
+          </ListItem>
           <ListItem
             key={"Log Out"}
             disablePadding
             sx={{ display: "block" }}
             onClick={handleLogout}
           >
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
-              }}
-            >
-              <ListItemIcon
+            <Tooltip title="Log Out" placement="right">
+              <ListItemButton
                 sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
                 }}
               >
-                <LogoutIcon />
-              </ListItemIcon>
-              <ListItemText
-                primary={"Log Out"}
-                sx={{ opacity: open ? 1 : 0 }}
-              />
-            </ListItemButton>
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                  }}
+                >
+                  <LogoutIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primary={"Log Out"}
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
+              </ListItemButton>
+            </Tooltip>
           </ListItem>
         </List>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
         {menuData === "Dashboard" && <Dashboard />}
-        {menuData === "AdminPanel" && <AdminPanel />}
       </Box>
     </Box>
   );
