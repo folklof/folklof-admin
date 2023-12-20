@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { setUser } from "../../store/userSlice";
 
 import Dashboard from "../Dashboard";
+import GenerateBookPage from "../GenerateBookPage";
 
 // MUI Components
 import { styled, useTheme } from "@mui/material/styles";
@@ -374,6 +375,7 @@ export default function MiniDrawer() {
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
         {menuData === "Dashboard" && <Dashboard />}
+        {menuData === "Generate Book" && <GenerateBookPage />}
       </Box>
     </Box>
   );
