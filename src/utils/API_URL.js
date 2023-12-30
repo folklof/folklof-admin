@@ -1,3 +1,3 @@
-const API_URL = "https://api-admin.folklof.com/api/v1";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default API_URL;
