@@ -27,6 +27,7 @@ const CreateQuizPage = () => {
     option3: "",
   });
   const [selectedOption, setSelectedOption] = useState(""); 
+  const [submittedQuiz, setSubmittedQuiz] = useState(null);
   const [books, setBooks] = useState([]);
   const [selectedBook, setSelectedBook] = useState(null);
   const [selectedBookId, setSelectedBookId] = useState(null)
