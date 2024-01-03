@@ -156,7 +156,7 @@ const CreateQuizPage = () => {
             >
             Submit
             </Button>
-            <Typography variant="body2" sx={{ marginTop: 2, color: "gray" }}>
+            <Typography variant="body2" sx={{ marginTop: 2, color: "gray", display: "flex", justifyContent: "flex-start" }}>
             *Check one of the options to indicate the correct answer.
             </Typography>
         </CardContent>
