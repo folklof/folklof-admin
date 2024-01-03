@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import API_URL from "../../utils/API_URL";
+import Swal from 'sweetalert2';
 
 const CreateQuizPage = () => {
   const [question, setQuestion] = useState("");
@@ -26,7 +27,6 @@ const CreateQuizPage = () => {
     option3: "",
   });
   const [selectedOption, setSelectedOption] = useState(""); 
-  const [submittedQuiz, setSubmittedQuiz] = useState(null);
   const [books, setBooks] = useState([]);
   const [selectedBook, setSelectedBook] = useState(null);
   const [selectedBookId, setSelectedBookId] = useState(null)
@@ -86,8 +86,21 @@ const CreateQuizPage = () => {
       setSelectedOption("");
       setSelectedBook(null);
       setSelectedBookId(null);
+      Swal.fire({
+        title: 'Success!',
+        text: 'Quiz created successfully.',
+        icon: 'success',
+        confirmButtonText: 'OK',
+      });
+  
     } catch (error) {
       console.log("Error submitting quiz", error);
+      Swal.fire({
+        title: 'Error!',
+        text: 'Failed to create quiz. Please try again.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+      });
     }
     console.log(selectedBookId, question, optionValues, selectedOption);
   };
@@ -161,23 +174,6 @@ const CreateQuizPage = () => {
             </Typography>
         </CardContent>
       </Card>
-
-      {submittedQuiz && (
-        <Card sx={{ marginTop: 2 }}>
-          <CardContent>
-            <Typography variant="h5" gutterBottom>
-              Submitted Quiz
-            </Typography>
-            <Typography variant="body1">Question: {submittedQuiz.question}</Typography>
-            <Typography variant="body1">
-              Options: {JSON.stringify(submittedQuiz.options)}
-            </Typography>
-            <Typography variant="body1">
-              Correct Answer: {submittedQuiz.correct_answer}
-            </Typography>
-          </CardContent>
-        </Card>
-      )}
     </div>
   );
 };
