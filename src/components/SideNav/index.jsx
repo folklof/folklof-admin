@@ -33,6 +33,7 @@ import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import BookIcon from "@mui/icons-material/Book";
 import QuizIcon from "@mui/icons-material/Quiz";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import UserManagement from "../UserManagement";
 
 const drawerWidth = 240;
 
@@ -282,10 +283,10 @@ export default function MiniDrawer() {
         <Divider />
         <List>
           <ListItem
-            key={"User"}
+            key={"User Management"}
             disablePadding
             sx={{ display: "block" }}
-            onClick={() => handleListItemClick("User")}
+            onClick={() => handleListItemClick("User Management")}
           >
             <Tooltip title="User Management" placement="right">
               <ListItemButton
@@ -378,6 +379,7 @@ export default function MiniDrawer() {
         {menuData === "Dashboard" && <Dashboard />}
         {menuData === "Generate Book" && <GenerateBookPage />}
         {menuData === "Create Quiz" && <CreateQuizPage />}
+        {menuData === "User Management" && <UserManagement />}
       </Box>
     </Box>
   );
