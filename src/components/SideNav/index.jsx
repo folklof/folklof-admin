@@ -4,6 +4,7 @@ import { setUser } from "../../store/userSlice";
 
 import Dashboard from "../Dashboard";
 import GenerateBookPage from "../GenerateBookPage";
+import CreateQuizPage from "../QuizPage";
 
 // MUI Components
 import { styled, useTheme } from "@mui/material/styles";
@@ -376,6 +377,7 @@ export default function MiniDrawer() {
         <DrawerHeader />
         {menuData === "Dashboard" && <Dashboard />}
         {menuData === "Generate Book" && <GenerateBookPage />}
+        {menuData === "Create Quiz" && <CreateQuizPage />}
       </Box>
     </Box>
   );
