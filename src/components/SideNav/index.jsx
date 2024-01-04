@@ -4,6 +4,8 @@ import { setUser } from "../../store/userSlice";
 
 import Dashboard from "../Dashboard";
 import GenerateBookPage from "../GenerateBookPage";
+import UserManagement from "../UserManagement";
+import ProfileSetting from "../ProfileSetting";
 import CreateQuizPage from "../QuizPage";
 
 // MUI Components
@@ -33,7 +35,6 @@ import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import BookIcon from "@mui/icons-material/Book";
 import QuizIcon from "@mui/icons-material/Quiz";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import UserManagement from "../UserManagement";
 
 const drawerWidth = 240;
 
@@ -313,10 +314,10 @@ export default function MiniDrawer() {
             </Tooltip>
           </ListItem>
           <ListItem
-            key={"Profile"}
+            key={"Profile Setting"}
             disablePadding
             sx={{ display: "block" }}
-            onClick={() => handleListItemClick("Profile")}
+            onClick={() => handleListItemClick("Profile Setting")}
           >
             <Tooltip title="Profile Setting" placement="right">
               <ListItemButton
@@ -380,6 +381,7 @@ export default function MiniDrawer() {
         {menuData === "Generate Book" && <GenerateBookPage />}
         {menuData === "Create Quiz" && <CreateQuizPage />}
         {menuData === "User Management" && <UserManagement />}
+        {menuData === "Profile Setting" && <ProfileSetting />}
       </Box>
     </Box>
   );
