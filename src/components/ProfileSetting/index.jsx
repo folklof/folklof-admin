@@ -23,6 +23,7 @@ import MuiAlert from '@mui/material/Alert';
 import axios from 'axios';
 import API_URL from "../../utils/API_URL";
 import { setUser } from '../../store/userSlice';
+import LoadingOverlay from '../LoadingOverlay';
 
 const styleBox = {
   display: 'flex',
@@ -37,19 +38,20 @@ const color2 = '#c2185b';
 const ProfileSetting = () => {
   const user = useSelector((state) => state.user.user); // get user
   const dispatch = useDispatch(); // set
-
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+  const [snackbarMessage, setSnackbarMessage] = useState("");
   const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
+  const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
   const [updatedUserData, setUpdatedUserData] = useState({
     name: user.username,
     phone: user.phone,
     age: user.age,
   });
 
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
-  const [snackbarMessage, setSnackbarMessage] = useState("");
 
   const handleUpdateUser = async () => {
+    setIsLoadingUpdate(true);
     try {
       const ageAsNumber = parseInt(updatedUserData.age, 10); //convert string to a number
       const response = await axios.put(`${API_URL}/users/${user.ID}`, {
@@ -67,6 +69,7 @@ const ProfileSetting = () => {
     } catch (error) {
       console.error("Error updating user:", error);
     } finally {
+      setIsLoadingUpdate(false);
       setUpdateModalOpen(false);
     }
   };
@@ -108,6 +111,7 @@ const ProfileSetting = () => {
 
   return (
     <>
+      {isLoadingUpdate ? <LoadingOverlay /> : null}
       <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
         <Paper sx={{ borderRadius: '16px' }}>
           <Box sx={{ border: `1px solid ${color1}`, backgroundColor: color1, display: 'flex', justifyContent: 'center', flexDirection: 'column', padding: '15px' }}>
@@ -207,6 +211,7 @@ const ProfileSetting = () => {
       </Snackbar>
     </>
   );
+
 };
 
 export default ProfileSetting;

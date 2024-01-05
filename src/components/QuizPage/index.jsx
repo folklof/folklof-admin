@@ -5,7 +5,7 @@ import {
   Typography,
   TextField,
   Button,
-  Checkbox,  
+  Checkbox,
   Grid,
   Autocomplete,
   Box,
@@ -13,6 +13,7 @@ import {
 import axios from "axios";
 import API_URL from "../../utils/API_URL";
 import Swal from 'sweetalert2';
+import LoadingOverlay from "../LoadingOverlay";
 
 const CreateQuizPage = () => {
   const [question, setQuestion] = useState("");
@@ -26,11 +27,11 @@ const CreateQuizPage = () => {
     option2: "",
     option3: "",
   });
-  const [selectedOption, setSelectedOption] = useState(""); 
-  const [submittedQuiz, setSubmittedQuiz] = useState(null);
+  const [selectedOption, setSelectedOption] = useState("");
   const [books, setBooks] = useState([]);
   const [selectedBook, setSelectedBook] = useState(null);
   const [selectedBookId, setSelectedBookId] = useState(null)
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -53,7 +54,7 @@ const CreateQuizPage = () => {
     }));
     setSelectedOption(key);
   };
-  
+
   const handleTextFieldChange = (key, value) => {
     setOptionValues((prevOptionValues) => ({
       ...prevOptionValues,
@@ -62,6 +63,7 @@ const CreateQuizPage = () => {
   };
 
   const handleSubmitQuiz = async () => {
+    setIsLoading(true)
     try {
       const response = await axios.post(`${API_URL}/book-quiz`, {
         book_id: selectedBookId,
@@ -71,8 +73,8 @@ const CreateQuizPage = () => {
         option3: optionValues.option3 || '',
         correct_answer: optionValues[selectedOption] || '',
       });
-  
-      setSubmittedQuiz(response.data);
+      console.log(response)
+
       setQuestion("");
       setOptions({
         option1: false,
@@ -93,8 +95,9 @@ const CreateQuizPage = () => {
         icon: 'success',
         confirmButtonText: 'OK',
       });
-  
+      setIsLoading(false)
     } catch (error) {
+      setIsLoading(false)
       console.log("Error submitting quiz", error);
       Swal.fire({
         title: 'Error!',
@@ -106,8 +109,12 @@ const CreateQuizPage = () => {
     console.log(selectedBookId, question, optionValues, selectedOption);
   };
 
+  if (isLoading) {
+    return <LoadingOverlay />
+  }
+
   return (
-    <div>
+    <>
       <Box
         sx={{
           p: 2,
@@ -129,11 +136,11 @@ const CreateQuizPage = () => {
             getOptionLabel={(option) => option.title}
             value={selectedBook}
             onChange={(_, newValue) => {
-                setSelectedBook(newValue);
-                setSelectedBookId(newValue ? newValue.ID : null);
+              setSelectedBook(newValue);
+              setSelectedBookId(newValue ? newValue.ID : null);
             }}
             renderInput={(params) => <TextField {...params} label="Select Book" />}
-            />
+          />
           <TextField
             label="Question"
             multiline
@@ -146,20 +153,20 @@ const CreateQuizPage = () => {
           />
           <Grid container spacing={2}>
             {Object.entries(options).map(([key, checked]) => (
-                <Grid item xs={4} key={key}>
+              <Grid item xs={4} key={key}>
                 <Checkbox
-                    checked={checked}
-                    onChange={() => handleOptionChange(key)}
-                    color="primary"
+                  checked={checked}
+                  onChange={() => handleOptionChange(key)}
+                  color="primary"
                 />
                 <TextField
-                    label={`Option ${key.substring(key.length - 1)}`}
-                    value={optionValues[key]}
-                    onChange={(e) => handleTextFieldChange(key, e.target.value)}
-                    margin="normal"
-                    variant="outlined"
-                    />
-                </Grid>
+                  label={`Option ${key.substring(key.length - 1)}`}
+                  value={optionValues[key]}
+                  onChange={(e) => handleTextFieldChange(key, e.target.value)}
+                  margin="normal"
+                  variant="outlined"
+                />
+              </Grid>
             ))}
           </Grid>
           <Button
@@ -167,15 +174,15 @@ const CreateQuizPage = () => {
             color="primary"
             onClick={handleSubmitQuiz}
             sx={{ marginTop: 2 }}
-            >
+          >
             Submit
-            </Button>
-            <Typography variant="body2" sx={{ marginTop: 2, color: "gray", display: "flex", justifyContent: "flex-start" }}>
+          </Button>
+          <Typography variant="body2" sx={{ marginTop: 2, color: "gray", display: "flex", justifyContent: "flex-start" }}>
             *Check one of the options to indicate the correct answer.
-            </Typography>
+          </Typography>
         </CardContent>
       </Card>
-    </div>
+    </>
   );
 };
 

@@ -7,7 +7,6 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  CircularProgress,
   TextField,
   Box,
   IconButton,
@@ -20,6 +19,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import MuiAlert from '@mui/material/Alert';
 import axios from 'axios';
 import API_URL from '../../utils/API_URL';
+import LoadingOverlay from '../LoadingOverlay';
 
 const color1 = '#3384d3';
 const white = { color: 'white' };
@@ -39,6 +39,7 @@ const UserManagement = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [clickedUserData, setClickedUserData] = useState(null);
+  const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
@@ -59,6 +60,7 @@ const UserManagement = () => {
   });
 
   const handleUpdateUser = async () => {
+    setIsLoadingUpdate(true);
     try {
       const updatedUser = {
         name: selectedUser.username,
@@ -72,6 +74,7 @@ const UserManagement = () => {
         console.log('User updated successfully:', response.data.message);
         showSnackbar('success', 'User updated successfully');
         queryClient.invalidateQueries('users');
+
       } else {
         console.error('Error updating user:', response.data);
         showSnackbar('error', 'Error updating user');
@@ -79,9 +82,11 @@ const UserManagement = () => {
     } catch (error) {
       console.error('Error updating user:', error);
     } finally {
+      setIsLoadingUpdate(false);
       handleModalClose();
     }
   };
+
 
   const filteredUsers = allUsers
     ? allUsers
@@ -151,9 +156,8 @@ const UserManagement = () => {
 
   return (
     <>
-      {isLoadingUsers ? (
-        <CircularProgress size={24} />
-      ) : isErrorUsers ? (
+      {isLoadingUsers || isLoadingUpdate ? <LoadingOverlay /> : null}
+      {isErrorUsers ? (
         <Box>Error while fetching user data</Box>
       ) : (
         <>
