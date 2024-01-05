@@ -14,6 +14,7 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import axios from "axios";
 import API_URL from "../../utils/API_URL";
+import LoadingOverlay from "../LoadingOverlay";
 
 const HistoryQuizPage = () => {
   const [quizHistory, setQuizHistory] = useState([]);
@@ -23,8 +24,8 @@ const HistoryQuizPage = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Define the fetchQuizHistory function with useCallback
   const fetchQuizHistory = useCallback(async () => {
     try {
       const response = await axios.get(`${API_URL}/history-quiz`);
@@ -32,12 +33,11 @@ const HistoryQuizPage = () => {
     } catch (error) {
       console.error("Error fetching quiz history:", error);
     }
-  }, []); // Empty dependency array as there are no dependencies
+  }, []);
 
-  // Use the fetchQuizHistory function within useEffect
   useEffect(() => {
     fetchQuizHistory();
-  }, [fetchQuizHistory]); 
+  }, [fetchQuizHistory]);
 
   const handleEditModalOpen = (quiz) => {
     setSelectedQuiz(quiz);
@@ -52,6 +52,7 @@ const HistoryQuizPage = () => {
   };
 
   const handleEditScores = async (quizId) => {
+    setIsLoading(true);
     try {
       console.log(editedScores);
       await axios.put(`${API_URL}/history-quiz/${quizId}`, {
@@ -59,22 +60,27 @@ const HistoryQuizPage = () => {
       });
       fetchQuizHistory();
       showSnackbar("Scores updated successfully", "success");
+      setIsLoading(false);
     } catch (error) {
       console.error("Error editing scores:", error);
       showSnackbar("Failed to update scores", "error");
+      setIsLoading(false);
     }
 
     handleEditModalClose();
   };
 
   const handleDeleteQuiz = async (quizId) => {
+    setIsLoading(true);
     try {
       await axios.delete(`${API_URL}/history-quiz/${quizId}`);
       fetchQuizHistory();
       showSnackbar("Quiz deleted successfully", "success");
+      setIsLoading(false);
     } catch (error) {
       console.error("Error deleting quiz:", error);
       showSnackbar("Failed to delete quiz", "error");
+      setIsLoading(false);
     }
   };
 
@@ -92,32 +98,36 @@ const HistoryQuizPage = () => {
   };
 
   const columns = [
-    { field: "ID", 
-      headerName: "ID", 
+    {
+      field: "ID",
+      headerName: "ID",
       width: 150,
       headerAlign: 'center',
       align: 'center',
       marginLeft: 200
     },
-    { field: "bookquiz_id",
-      headerName: "Question", 
+    {
+      field: "bookquiz_id",
+      headerName: "Question",
       width: 350,
       headerAlign: 'center',
       valueGetter: (params) => params.row.bookquiz.question,
     },
-    { field: "user_id", 
-      headerName: "Username", 
+    {
+      field: "user_id",
+      headerName: "Username",
       width: 150,
-      headerAlign: 'center', 
+      headerAlign: 'center',
       align: 'center',
       valueGetter: (params) => params.row.user.username
     },
-    { field: "scores", 
-      headerName: "Scores", 
-      type: "number", 
-      width: 100, 
+    {
+      field: "scores",
+      headerName: "Scores",
+      type: "number",
+      width: 100,
       headerAlign: 'center',
-      align: 'center', 
+      align: 'center',
     },
     {
       field: 'created_date',
@@ -125,7 +135,7 @@ const HistoryQuizPage = () => {
       type: 'dateTime',
       width: 180,
       headerAlign: 'center',
-      align: 'center', 
+      align: 'center',
       valueGetter: (params) => new Date(params.row.created_date),
     },
     {
@@ -133,7 +143,7 @@ const HistoryQuizPage = () => {
       headerName: "Actions",
       width: 150,
       headerAlign: 'center',
-      align: 'center', 
+      align: 'center',
       renderCell: (params) => (
         <>
           <IconButton
@@ -158,8 +168,12 @@ const HistoryQuizPage = () => {
     id: item.ID,
   }));
 
+  if (isLoading) {
+    return <LoadingOverlay />
+  }
+
   return (
-    <div>
+    <>
       <Box
         sx={{
           p: 2,
@@ -169,15 +183,15 @@ const HistoryQuizPage = () => {
       >
         <Typography variant="h4">History Quizzes by Folklof</Typography>
       </Box>
-        <CardContent sx={{ margin: "8px" }}>
-          <div style={{ height: 450, width: "100%" }}>
-            <DataGrid
-              rows={formattedQuizHistory}
-              columns={columns}
-              pageSize={5}
-            />
-          </div>
-        </CardContent>
+      <CardContent sx={{ margin: "8px" }}>
+        <div style={{ height: 450, width: "100%" }}>
+          <DataGrid
+            rows={formattedQuizHistory}
+            columns={columns}
+            pageSize={5}
+          />
+        </div>
+      </CardContent>
 
       {/* Modal untuk mengedit scores */}
       <Modal
@@ -230,7 +244,7 @@ const HistoryQuizPage = () => {
           {snackbarMessage}
         </MuiAlert>
       </Snackbar>
-    </div>
+    </>
   );
 };
 
