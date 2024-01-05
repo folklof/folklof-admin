@@ -36,6 +36,7 @@ import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import BookIcon from "@mui/icons-material/Book";
 import QuizIcon from "@mui/icons-material/Quiz";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import HistoryEduIcon from '@mui/icons-material/HistoryEdu';
 
 const drawerWidth = 240;
 
@@ -271,7 +272,7 @@ export default function MiniDrawer() {
                     justifyContent: "center",
                   }}
                 >
-                  <QuizIcon />
+                  <HistoryEduIcon />
                 </ListItemIcon>
                 <ListItemText
                   primary={"History Quiz"}
