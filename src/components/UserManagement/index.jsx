@@ -34,12 +34,10 @@ const UserManagement = () => {
   const queryClient = useQueryClient();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [roleFilter, setRoleFilter] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
   const [selectedUser, setSelectedUser] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [clickedUserData, setClickedUserData] = useState(null);
-  const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
@@ -59,8 +57,10 @@ const UserManagement = () => {
     }
   });
 
+
+
   const handleUpdateUser = async () => {
-    setIsLoadingUpdate(true);
+    setIsLoading(true);
     try {
       const updatedUser = {
         name: selectedUser.username,
@@ -82,21 +82,9 @@ const UserManagement = () => {
     } catch (error) {
       console.error('Error updating user:', error);
     } finally {
-      setIsLoadingUpdate(false);
+      setIsLoading(false);
       handleModalClose();
     }
-  };
-
-
-  const filteredUsers = allUsers
-    ? allUsers
-      .filter((user) => user.username.toLowerCase().includes(searchQuery.toLowerCase()))
-      .filter((user) => (roleFilter ? user.role_id.toString() === roleFilter : true))
-    : [];
-
-  const handleSearchChange = (event) => {
-    setSearchQuery(event.target.value);
-    setPage(0);
   };
 
   const handleUpdateClick = (user) => {
@@ -148,29 +136,43 @@ const UserManagement = () => {
       flex: 0.6,
       renderCell: (params) => (
         <IconButton onClick={() => handleUpdateClick(params.row)}>
-          <EditIcon />
+          <EditIcon color="primary" />
         </IconButton>
       ),
     },
   ];
 
+  // Handling map before entering rows in DataGrid
+  const fetchUsers = allUsers ?
+    allUsers.map((user) => ({ id: user.ID, ...user }))
+    : []
+
   return (
     <>
-      {isLoadingUsers || isLoadingUpdate ? <LoadingOverlay /> : null}
+      {isLoading ? <LoadingOverlay /> : null}
       {isErrorUsers ? (
         <Box>Error while fetching user data</Box>
       ) : (
         <>
-          <TextField
-            sx={{ width: 180, margin: '20px' }}
-            label="Search by Name"
-            variant="outlined"
-            value={searchQuery}
-            onChange={handleSearchChange}
-          />
+          <Box
+            sx={{
+              p: 2,
+              margin: 1,
+              padding: '15px',
+              border: "1px dashed grey",
+              textAlign: "left",
+              wordWrap: "break-word",
+            }}
+          >
+            <Typography variant="h4" sx={{ textAlign: 'center' }}>User Management</Typography>
+            <Typography sx={{ textAlign: 'center', margin: '10px' }}>
+              In user management, you can perform listing user data and editing user data.
+            </Typography>
+          </Box>
           <Box style={{ height: 400, width: '100%' }}>
             <DataGrid sx={{ minWidth: '1000px' }}
-              rows={filteredUsers.map((user) => ({ id: user.ID, ...user }))}
+              loading={isLoadingUsers}
+              rows={fetchUsers}
               columns={columns}
               pageSize={rowsPerPage}
               page={page}

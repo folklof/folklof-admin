@@ -42,7 +42,7 @@ const ProfileSetting = () => {
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
-  const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [updatedUserData, setUpdatedUserData] = useState({
     name: user.username,
     phone: user.phone,
@@ -51,7 +51,7 @@ const ProfileSetting = () => {
 
 
   const handleUpdateUser = async () => {
-    setIsLoadingUpdate(true);
+    setIsLoading(true);
     try {
       const ageAsNumber = parseInt(updatedUserData.age, 10); //convert string to a number
       const response = await axios.put(`${API_URL}/users/${user.ID}`, {
@@ -69,7 +69,7 @@ const ProfileSetting = () => {
     } catch (error) {
       console.error("Error updating user:", error);
     } finally {
-      setIsLoadingUpdate(false);
+      setIsLoading(false);
       setUpdateModalOpen(false);
     }
   };
@@ -111,8 +111,23 @@ const ProfileSetting = () => {
 
   return (
     <>
-      {isLoadingUpdate ? <LoadingOverlay /> : null}
-      <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+      {isLoading ? <LoadingOverlay /> : null}
+      <Box display="flex" flexDirection={'column'} justifyContent="center" alignItems="center" height="100vh">
+        <Box
+          sx={{
+            p: 2,
+            margin: 3,
+            padding: '15px',
+            border: "1px dashed grey",
+            textAlign: "left",
+            wordWrap: "break-word",
+          }}
+        >
+          <Typography variant="h4" sx={{ textAlign: 'center' }}>Profile Setting</Typography>
+          <Typography sx={{ textAlign: 'center', margin: '10px', width: '320px' }}>
+            You can edit your profile here
+          </Typography>
+        </Box>
         <Paper sx={{ borderRadius: '16px' }}>
           <Box sx={{ border: `1px solid ${color1}`, backgroundColor: color1, display: 'flex', justifyContent: 'center', flexDirection: 'column', padding: '15px' }}>
             <Avatar
