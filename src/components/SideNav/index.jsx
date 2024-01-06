@@ -4,6 +4,10 @@ import { setUser } from "../../store/userSlice";
 
 import Dashboard from "../Dashboard";
 import GenerateBookPage from "../GenerateBookPage";
+import UserManagement from "../UserManagement";
+import ProfileSetting from "../ProfileSetting";
+import CreateQuizPage from "../QuizPage";
+import HistoryQuizPage from "../HistoryQuizPage"
 
 // MUI Components
 import { styled, useTheme } from "@mui/material/styles";
@@ -32,6 +36,7 @@ import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import BookIcon from "@mui/icons-material/Book";
 import QuizIcon from "@mui/icons-material/Quiz";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import HistoryEduIcon from '@mui/icons-material/HistoryEdu';
 
 const drawerWidth = 240;
 
@@ -267,7 +272,7 @@ export default function MiniDrawer() {
                     justifyContent: "center",
                   }}
                 >
-                  <QuizIcon />
+                  <HistoryEduIcon />
                 </ListItemIcon>
                 <ListItemText
                   primary={"History Quiz"}
@@ -281,10 +286,10 @@ export default function MiniDrawer() {
         <Divider />
         <List>
           <ListItem
-            key={"User"}
+            key={"User Management"}
             disablePadding
             sx={{ display: "block" }}
-            onClick={() => handleListItemClick("User")}
+            onClick={() => handleListItemClick("User Management")}
           >
             <Tooltip title="User Management" placement="right">
               <ListItemButton
@@ -311,10 +316,10 @@ export default function MiniDrawer() {
             </Tooltip>
           </ListItem>
           <ListItem
-            key={"Profile"}
+            key={"Profile Setting"}
             disablePadding
             sx={{ display: "block" }}
-            onClick={() => handleListItemClick("Profile")}
+            onClick={() => handleListItemClick("Profile Setting")}
           >
             <Tooltip title="Profile Setting" placement="right">
               <ListItemButton
@@ -376,6 +381,10 @@ export default function MiniDrawer() {
         <DrawerHeader />
         {menuData === "Dashboard" && <Dashboard />}
         {menuData === "Generate Book" && <GenerateBookPage />}
+        {menuData === "Create Quiz" && <CreateQuizPage />}
+        {menuData === "User Management" && <UserManagement />}
+        {menuData === "Profile Setting" && <ProfileSetting />}
+        {menuData === "History Quiz" && <HistoryQuizPage />}
       </Box>
     </Box>
   );
