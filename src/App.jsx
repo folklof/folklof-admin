@@ -1,7 +1,6 @@
 import {
   DashboardPage,
   LoginPage,
-  RegisterPage,
   NotFoundPage,
   AuthPage,
 } from "./pages";
@@ -19,10 +18,6 @@ function App() {
     {
       path: "/",
       element: <LoginPage />,
-    },
-    {
-      path: "/register",
-      element: <RegisterPage />,
     },
     {
       path: "/auth/success",
