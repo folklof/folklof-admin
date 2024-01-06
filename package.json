@@ -26,8 +26,7 @@
     "react-redux": "^9.0.4",
     "react-router-dom": "^6.17.0",
     "redux-persist": "^6.0.0",
-    "styled-components": "^5.3.8",
-    "sweetalert2": "^11.7.32"
+    "styled-components": "^5.3.8"
   },
   "devDependencies": {
     "@types/react": "^18.0.27",
