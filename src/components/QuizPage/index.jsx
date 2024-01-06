@@ -9,10 +9,11 @@ import {
   Grid,
   Autocomplete,
   Box,
+  Snackbar
 } from "@mui/material";
 import axios from "axios";
+import MuiAlert from '@mui/material/Alert';
 import API_URL from "../../utils/API_URL";
-import Swal from 'sweetalert2';
 import LoadingOverlay from "../LoadingOverlay";
 
 const CreateQuizPage = () => {
@@ -32,6 +33,9 @@ const CreateQuizPage = () => {
   const [selectedBook, setSelectedBook] = useState(null);
   const [selectedBookId, setSelectedBookId] = useState(null)
   const [isLoading, setIsLoading] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -89,24 +93,28 @@ const CreateQuizPage = () => {
       setSelectedOption("");
       setSelectedBook(null);
       setSelectedBookId(null);
-      Swal.fire({
-        title: 'Success!',
-        text: 'Quiz created successfully.',
-        icon: 'success',
-        confirmButtonText: 'OK',
-      });
       setIsLoading(false)
+      showSnackbar('success', 'Quiz Created Successfully!!');
     } catch (error) {
       setIsLoading(false)
+      showSnackbar('error', 'Create Quiz Failed!');
       console.log("Error submitting quiz", error);
-      Swal.fire({
-        title: 'Error!',
-        text: 'Failed to create quiz. Please try again.',
-        icon: 'error',
-        confirmButtonText: 'OK',
-      });
     }
     console.log(selectedBookId, question, optionValues, selectedOption);
+  };
+
+  // Snackbar
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbarOpen(false);
+  };
+
+  const showSnackbar = (severity, message) => {
+    setSnackbarSeverity(severity);
+    setSnackbarMessage(message);
+    setSnackbarOpen(true);
   };
 
   if (isLoading) {
@@ -182,6 +190,21 @@ const CreateQuizPage = () => {
           </Typography>
         </CardContent>
       </Card>
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={4000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'bot', horizontal: 'left' }}
+      >
+        <MuiAlert
+          elevation={6}
+          variant="filled"
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}>
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
     </>
   );
 };
