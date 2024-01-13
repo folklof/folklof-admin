@@ -18,7 +18,7 @@ import {
   FormControl,
   InputLabel,
   Alert,
-  Snackbar
+  Snackbar,
 } from "@mui/material";
 import { useMutation, useQuery } from "react-query";
 import {
@@ -26,6 +26,7 @@ import {
   generateImageApi,
   uploadImageApi,
 } from "../../hooks/useMutation";
+import { useSelector } from "react-redux";
 import axios from "axios";
 import Box from "@mui/system/Box";
 import { Error } from "@mui/icons-material";
@@ -70,8 +71,20 @@ const GenerateBookPage = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedAgeGroup, setSelectedAgeGroup] = useState("");
 
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+
   const [openModal, setOpenModal] = useState(false);
   const [openAlert, setOpenAlert] = useState(false);
+
+  const userData = useSelector((state) => state.user.user);
+
+  const showSnackbar = (severity, message) => {
+    setSnackbarSeverity(severity);
+    setSnackbarMessage(message);
+    setSnackbarOpen(true);
+  };
 
   const {
     data: categories,
@@ -232,6 +245,7 @@ const GenerateBookPage = () => {
     e.preventDefault();
     const formData = {
       title: title,
+      user_id: userData.ID,
       category_id: selectedCategory,
       agegroup_id: selectedAgeGroup,
       desc: description,
@@ -240,18 +254,22 @@ const GenerateBookPage = () => {
       audio_link: audioForm,
     };
 
-    console.log(formData);
-
     try {
       const response = await axios.post(`${API_URL}/books`, formData);
       console.log("Form submitted successfully:", response.data);
       handleCloseModal();
+      showSnackbar("success", "Book added successfully");
     } catch (error) {
       console.error("Error submitting form:", error);
-
-      // Optionally display an error message to the user
-      // You can use state variables to show an error message in the UI
+      showSnackbar("error", "Error while adding a book");
     }
+  };
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false);
   };
 
   return (
@@ -307,6 +325,13 @@ const GenerateBookPage = () => {
               margin="normal"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
+            />
+            <TextField
+              label="User ID"
+              readOnly
+              fullWidth
+              margin="normal"
+              value={userData.ID}
             />
             <FormControl fullWidth margin="normal">
               <InputLabel id="category-select-label">Category</InputLabel>
@@ -620,6 +645,22 @@ const GenerateBookPage = () => {
           </Paper>
         </Grid>
         {/* Third Grid  */}
+
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={4000}
+          onClose={handleSnackbarClose}
+          anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+        >
+          <Alert
+            elevation={6}
+            variant="filled"
+            onClose={handleSnackbarClose}
+            severity={snackbarSeverity}
+          >
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
 
         <Grid item xs={6}>
           <Paper elevation={3} style={{ padding: "20px", width: "700px" }}>
