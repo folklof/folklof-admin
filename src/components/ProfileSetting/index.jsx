@@ -11,7 +11,8 @@ import {
   DialogContent,
   DialogActions,
   TextField,
-  Snackbar
+  Snackbar,
+  Alert
 } from '@mui/material';
 import WorkIcon from '@mui/icons-material/Work';
 import EmailIcon from '@mui/icons-material/Email';
@@ -19,7 +20,6 @@ import PersonIcon from '@mui/icons-material/Person';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import FingerprintIcon from '@mui/icons-material/Fingerprint';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import MuiAlert from '@mui/material/Alert';
 import axios from 'axios';
 import API_URL from "../../utils/API_URL";
 import { setUser } from '../../store/userSlice';
@@ -213,16 +213,16 @@ const ProfileSetting = () => {
         open={snackbarOpen}
         autoHideDuration={4000}
         onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: 'bot', horizontal: 'left' }}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
       >
-        <MuiAlert
+        <Alert
           elevation={6}
           variant="filled"
           onClose={handleSnackbarClose}
           severity={snackbarSeverity}
         >
           {snackbarMessage}
-        </MuiAlert>
+        </Alert>
       </Snackbar>
     </>
   );
