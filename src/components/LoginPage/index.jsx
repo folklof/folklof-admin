@@ -1,5 +1,6 @@
 import React from "react";
 import kanbanBoard from "../../assets/kanban.avif";
+import leoMagical from "../../assets/leo.webp";
 import API_URL from "../../utils/API_URL";
 
 import Button from "@mui/material/Button";
@@ -50,7 +51,7 @@ export default function LoginPageComponent() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: `url(${kanbanBoard}), linear-gradient(rgb(20, 13, 27), rgba(0, 0, 0, 1))`,
+            backgroundImage: `url(${leoMagical}), linear-gradient(rgb(20, 13, 27), rgba(0, 0, 0, 1))`,
             backgroundRepeat: "no-repeat",
             backgroundColor: "dark",
             backgroundSize: "cover",
@@ -69,7 +70,7 @@ export default function LoginPageComponent() {
           >
             <Logo className={style.logo} />
             <Typography component="h1" variant="h6">
-              Admin Panel
+              Folklof Admin Panel
             </Typography>
             <Box component="form" noValidate sx={{ mt: 1 }}>
               <Button
