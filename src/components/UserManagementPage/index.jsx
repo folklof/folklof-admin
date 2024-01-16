@@ -57,8 +57,6 @@ const UserManagement = () => {
     }
   });
 
-
-
   const handleUpdateUser = async () => {
     setIsLoading(true);
     try {

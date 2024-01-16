@@ -44,20 +44,25 @@ const ProfileSetting = () => {
   const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [updatedUserData, setUpdatedUserData] = useState({
-    name: user.username,
-    phone: user.phone,
-    age: user.age,
+    name: '',
+    phone: '',
+    age: '',
   });
-
 
   const handleUpdateUser = async () => {
     setIsLoading(true);
     try {
+      if (!user) {
+        console.error("User data is not available.");
+        return;
+      }
+
       const ageAsNumber = parseInt(updatedUserData.age, 10); //convert string to a number
       const response = await axios.put(`${API_URL}/users/${user.ID}`, {
         ...updatedUserData,
         age: ageAsNumber,
       });
+
       if (response.data.success) {
         console.log("User updated successfully:", response.data.message);
         dispatch(setUser(response.data.data));
@@ -113,59 +118,65 @@ const ProfileSetting = () => {
     <>
       {isLoading ? <LoadingOverlay /> : null}
       <Box display="flex" flexDirection={'column'} justifyContent="center" alignItems="center" height="100vh">
-        <Box
-          sx={{
-            p: 2,
-            margin: 3,
-            padding: '15px',
-            border: "1px dashed grey",
-            textAlign: "left",
-            wordWrap: "break-word",
-          }}
-        >
-          <Typography variant="h4" sx={{ textAlign: 'center' }}>Profile Setting</Typography>
-          <Typography sx={{ textAlign: 'center', margin: '10px', width: '320px' }}>
-            You can edit your profile here
-          </Typography>
-        </Box>
-        <Paper sx={{ borderRadius: '16px' }}>
-          <Box sx={{ border: `1px solid ${color1}`, backgroundColor: color1, display: 'flex', justifyContent: 'center', flexDirection: 'column', padding: '15px' }}>
-            <Avatar
-              key={user.ID}
-              style={{ margin: '1rem auto', backgroundColor: color2, width: '60px', height: '60px', fontSize: '2rem' }}>
-              {user.username.charAt(0).toUpperCase()}
-            </Avatar>
-            <Typography sx={{ color: 'white', fontSize: '25px' }}>{user.username}</Typography>
-          </Box>
-          <Box sx={{ padding: '20px' }}>
+        {user ? (
+          <>
+            <Box
+              sx={{
+                p: 2,
+                margin: 3,
+                padding: '15px',
+                border: "1px dashed grey",
+                textAlign: "left",
+                wordWrap: "break-word",
+              }}
+            >
+              <Typography variant="h4" sx={{ textAlign: 'center' }}>Profile Setting</Typography>
+              <Typography sx={{ textAlign: 'center', margin: '10px', width: '320px' }}>
+                You can edit your profile here
+              </Typography>
+            </Box>
+            <Paper sx={{ borderRadius: '16px' }}>
+              <Box sx={{ border: `1px solid ${color1}`, backgroundColor: color1, display: 'flex', justifyContent: 'center', flexDirection: 'column', padding: '15px' }}>
+                <Avatar
+                  key={user.ID}
+                  style={{ margin: '1rem auto', backgroundColor: color2, width: '60px', height: '60px', fontSize: '2rem' }}>
+                  {user.username.charAt(0).toUpperCase()}
+                </Avatar>
+                <Typography sx={{ color: 'white', fontSize: '25px' }}>{user.username}</Typography>
+              </Box>
+              <Box sx={{ padding: '20px' }}>
 
-            <Box sx={styleBox}>
-              <PersonIcon sx={styleIcon} />{user.ID}
-            </Box>
-            <Box sx={styleBox}>
-              <EmailIcon sx={styleIcon} />{user.email}
-            </Box>
-            <Box sx={styleBox}>
-              <WorkIcon sx={styleIcon} />{user.role.name}
-            </Box>
-            <Box sx={styleBox}>
-              <FingerprintIcon sx={styleIcon} />{user.age} years old
-            </Box>
-            <Box sx={styleBox}>
-              <PhoneAndroidIcon sx={styleIcon} />{user.phone}
-            </Box>
-            <Box sx={styleBox}>
-              <CalendarMonthIcon sx={styleIcon} />{user.created_date.split('T')[0]}
-            </Box>
+                <Box sx={styleBox}>
+                  <PersonIcon sx={styleIcon} />{user.ID}
+                </Box>
+                <Box sx={styleBox}>
+                  <EmailIcon sx={styleIcon} />{user.email}
+                </Box>
+                <Box sx={styleBox}>
+                  <WorkIcon sx={styleIcon} />{user.role.name}
+                </Box>
+                <Box sx={styleBox}>
+                  <FingerprintIcon sx={styleIcon} />{user.age} years old
+                </Box>
+                <Box sx={styleBox}>
+                  <PhoneAndroidIcon sx={styleIcon} />{user.phone}
+                </Box>
+                <Box sx={styleBox}>
+                  <CalendarMonthIcon sx={styleIcon} />{user.created_date.split('T')[0]}
+                </Box>
 
-            {/* Update button */}
-            <Box sx={{ padding: '20px', textAlign: 'center' }}>
-              <Button variant="contained" color="primary" onClick={handleUpdateModalOpen}>
-                Edit Profile
-              </Button>
-            </Box>
-          </Box>
-        </Paper>
+                {/* Update button */}
+                <Box sx={{ padding: '20px', textAlign: 'center' }}>
+                  <Button variant="contained" color="primary" onClick={handleUpdateModalOpen}>
+                    Edit Profile
+                  </Button>
+                </Box>
+              </Box>
+            </Paper>
+          </>
+        ) : (
+          <LoadingOverlay />
+        )}
 
         {/* Update Modal */}
         <Dialog open={isUpdateModalOpen} onClose={handleModalClose}>
@@ -226,7 +237,6 @@ const ProfileSetting = () => {
       </Snackbar>
     </>
   );
-
 };
 
 export default ProfileSetting;
