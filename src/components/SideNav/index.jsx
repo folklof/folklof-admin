@@ -3,9 +3,10 @@ import { useDispatch } from "react-redux";
 import { setUser } from "../../store/userSlice";
 
 import Dashboard from "../Dashboard";
+import BookListPage from "../BookListPage";
 import GenerateBookPage from "../GenerateBookPage";
-import UserManagement from "../UserManagement";
-import ProfileSetting from "../ProfileSetting";
+import UserManagement from "../UserManagementPage";
+import ProfileSetting from "../ProfileSettingPage";
 import CreateQuizPage from "../QuizPage";
 import HistoryQuizPage from "../HistoryQuizPage"
 
@@ -37,6 +38,7 @@ import BookIcon from "@mui/icons-material/Book";
 import QuizIcon from "@mui/icons-material/Quiz";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import HistoryEduIcon from '@mui/icons-material/HistoryEdu';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
 
 const drawerWidth = 240;
 
@@ -186,6 +188,36 @@ export default function MiniDrawer() {
                 </ListItemIcon>
                 <ListItemText
                   primary={"Dashboard"}
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
+              </ListItemButton>
+            </Tooltip>
+          </ListItem>
+          <ListItem
+            key={"Book List"}
+            disablePadding
+            sx={{ display: "block" }}
+            onClick={() => handleListItemClick("Book List")}
+          >
+            <Tooltip title="Book List" placement="right">
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                  }}
+                >
+                  <MenuBookIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primary={"Book List"}
                   sx={{ opacity: open ? 1 : 0 }}
                 />
               </ListItemButton>
@@ -380,11 +412,12 @@ export default function MiniDrawer() {
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
         {menuData === "Dashboard" && <Dashboard />}
+        {menuData === "Book List" && <BookListPage />}
         {menuData === "Generate Book" && <GenerateBookPage />}
         {menuData === "Create Quiz" && <CreateQuizPage />}
+        {menuData === "History Quiz" && <HistoryQuizPage />}
         {menuData === "User Management" && <UserManagement />}
         {menuData === "Profile Setting" && <ProfileSetting />}
-        {menuData === "History Quiz" && <HistoryQuizPage />}
       </Box>
     </Box>
   );
