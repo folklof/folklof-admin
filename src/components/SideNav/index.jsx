@@ -3,7 +3,12 @@ import { useDispatch } from "react-redux";
 import { setUser } from "../../store/userSlice";
 
 import Dashboard from "../Dashboard";
+import BookListPage from "../BookListPage";
 import GenerateBookPage from "../GenerateBookPage";
+import UserManagement from "../UserManagementPage";
+import ProfileSetting from "../ProfileSettingPage";
+import CreateQuizPage from "../QuizPage";
+import HistoryQuizPage from "../HistoryQuizPage"
 
 // MUI Components
 import { styled, useTheme } from "@mui/material/styles";
@@ -32,6 +37,8 @@ import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import BookIcon from "@mui/icons-material/Book";
 import QuizIcon from "@mui/icons-material/Quiz";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import HistoryEduIcon from '@mui/icons-material/HistoryEdu';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
 
 const drawerWidth = 240;
 
@@ -187,6 +194,36 @@ export default function MiniDrawer() {
             </Tooltip>
           </ListItem>
           <ListItem
+            key={"Book List"}
+            disablePadding
+            sx={{ display: "block" }}
+            onClick={() => handleListItemClick("Book List")}
+          >
+            <Tooltip title="Book List" placement="right">
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                  }}
+                >
+                  <MenuBookIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primary={"Book List"}
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
+              </ListItemButton>
+            </Tooltip>
+          </ListItem>
+          <ListItem
             key={"Generate Book"}
             disablePadding
             sx={{ display: "block" }}
@@ -267,7 +304,7 @@ export default function MiniDrawer() {
                     justifyContent: "center",
                   }}
                 >
-                  <QuizIcon />
+                  <HistoryEduIcon />
                 </ListItemIcon>
                 <ListItemText
                   primary={"History Quiz"}
@@ -281,10 +318,10 @@ export default function MiniDrawer() {
         <Divider />
         <List>
           <ListItem
-            key={"User"}
+            key={"User Management"}
             disablePadding
             sx={{ display: "block" }}
-            onClick={() => handleListItemClick("User")}
+            onClick={() => handleListItemClick("User Management")}
           >
             <Tooltip title="User Management" placement="right">
               <ListItemButton
@@ -311,10 +348,10 @@ export default function MiniDrawer() {
             </Tooltip>
           </ListItem>
           <ListItem
-            key={"Profile"}
+            key={"Profile Setting"}
             disablePadding
             sx={{ display: "block" }}
-            onClick={() => handleListItemClick("Profile")}
+            onClick={() => handleListItemClick("Profile Setting")}
           >
             <Tooltip title="Profile Setting" placement="right">
               <ListItemButton
@@ -375,7 +412,12 @@ export default function MiniDrawer() {
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
         {menuData === "Dashboard" && <Dashboard />}
+        {menuData === "Book List" && <BookListPage />}
         {menuData === "Generate Book" && <GenerateBookPage />}
+        {menuData === "Create Quiz" && <CreateQuizPage />}
+        {menuData === "History Quiz" && <HistoryQuizPage />}
+        {menuData === "User Management" && <UserManagement />}
+        {menuData === "Profile Setting" && <ProfileSetting />}
       </Box>
     </Box>
   );
